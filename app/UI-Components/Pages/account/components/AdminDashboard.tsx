@@ -1,22 +1,21 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
-import { FaPlus, FaBoxOpen, FaShoppingBag, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa';
+import { FaPlus, FaBoxOpen, FaShoppingBag, FaCloudUploadAlt, FaSpinner, FaSync } from 'react-icons/fa';
 
-// ইন্টারফেস ডিফাইন
-interface Props {
-    handleLogout: () => void;
-}
-
+// ১. ইন্টারফেসসমূহ (any এরর দূর করার জন্য)
 interface Order {
-    id: string;
+    _id: string; // MongoDB Unique ID
+    id: string;  // ENT-123456 আইডি
     customerName: string;
     customerEmail: string;
-    date: string;
+    customerPhone: string;
     total: number;
     paymentMethod: string;
-    status: 'Pending' | 'Processing' | 'Delivered' | 'Cancelled';
+    txnId: string;
+    status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+    date: string;
 }
 
 interface ProductForm {
@@ -36,10 +35,14 @@ interface ProductForm {
     section: string;
 }
 
+interface Props {
+    handleLogout: () => void;
+}
+
 const AdminDashboard = ({ handleLogout }: Props) => {
-    const [activeTab, setActiveTab] = useState('orders');
+    const [activeTab, setActiveTab] = useState<'orders' | 'upload' | 'products'>('orders');
     const [loading, setLoading] = useState(false);
-    const [uploadingImage, setUploadingImage] = useState(false); // ইমেজ আপলোড স্টেট
+    const [uploadingImage, setUploadingImage] = useState(false);
     const [orders, setOrders] = useState<Order[]>([]);
     
     const [productData, setProductData] = useState<ProductForm>({
@@ -49,7 +52,24 @@ const AdminDashboard = ({ handleLogout }: Props) => {
         description: '', keyFeatures: ''
     });
 
-    // ১. ইমেজ আপলোড হ্যান্ডলার (ImgBB)
+    // ২. ডাটাবেস থেকে অর্ডার ফেচ করা (useCallback ফর মেমোরি অপ্টিমাইজেশন)
+    const fetchOrders = useCallback(async () => {
+        try {
+            const res = await fetch('/api/order');
+            if (res.ok) {
+                const data: Order[] = await res.json();
+                setOrders(data);
+            }
+        } catch (error: unknown) {
+            console.error("Order load error");
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchOrders();
+    }, [fetchOrders]);
+
+    // ৩. ইমেজ আপলোড (ImgBB)
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -59,7 +79,7 @@ const AdminDashboard = ({ handleLogout }: Props) => {
         formData.append('image', file);
 
         try {
-            const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;; 
+            const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY as string; 
             const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
                 method: 'POST',
                 body: formData,
@@ -72,148 +92,151 @@ const AdminDashboard = ({ handleLogout }: Props) => {
             } else {
                 toast.error("Image upload failed!");
             }
-        } catch (error) {
+        } catch (error: unknown) {
             toast.error("Error connecting to Image Server");
         } finally {
             setUploadingImage(false);
         }
     };
 
-    // ২. অর্ডার লোড করা
-    useEffect(() => {
-        const storedOrders = JSON.parse(localStorage.getItem('all_orders') || '[]');
-        if(storedOrders.length === 0) {
-            const dummyOrders: Order[] = [
-                { id: "#ORD-101", customerName: "Rahim Uddin", customerEmail: "rahim@mail.com", date: "22 Dec, 2025", total: 15000, paymentMethod: "COD", status: "Pending" },
-                { id: "#ORD-102", customerName: "Karim Khan", customerEmail: "karim@mail.com", date: "21 Dec, 2025", total: 4500, paymentMethod: "bKash", status: "Processing" },
-            ];
-            localStorage.setItem('all_orders', JSON.stringify(dummyOrders));
-            setOrders(dummyOrders);
-        } else {
-            setOrders(storedOrders);
-        }
-    }, []);
-
     const handleProductChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setProductData({ ...productData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setProductData(prev => ({ ...prev, [name]: value }));
     };
 
-    // ৩. ফাইনাল প্রোডাক্ট আপলোড
+    // ৪. প্রোডাক্ট আপলোড
     const handleProductUpload = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if(!productData.image) {
-            return toast.error("Please upload a product image first!");
-        }
+        if(!productData.image) return toast.error("Please upload image!");
 
         setLoading(true);
-        const featuresArray = productData.keyFeatures.split('\n').filter(line => line.trim() !== '');
-        const finalData = { ...productData, keyFeatures: featuresArray };
+        // keyFeatures কে অ্যারেতে কনভার্ট করা
+        const finalProductData = {
+            ...productData,
+            keyFeatures: productData.keyFeatures.split('\n').filter(line => line.trim() !== '')
+        };
 
         try {
             const res = await fetch('/api/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(finalData),
+                body: JSON.stringify(finalProductData),
             });
             
-            const data = await res.json();
             if (res.ok) {
-                toast.success(`Product Uploaded Successfully!`);
+                toast.success(`Product Uploaded to ${productData.section}!`);
                 setProductData({
                     title: '', price: '', lessPrice: '', image: '', category: 'Mobile Phone',
                     section: 'TopSelling', sale: 'New', review: '(10 Reviews)', sold: '0/0',
                     fastCharging: 'Yes', wireless: 'Yes', waterResistant: 'Yes',
                     description: '', keyFeatures: ''
                 });
-            } else {
-                toast.error(data.message || "Failed to upload");
             }
-        } catch (error) {
-            toast.error("Database connection failed!");
+        } catch (error: unknown) {
+            toast.error("Failed to upload product!");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleStatusChange = (id: string, newStatus: string) => {
-        const updatedOrders = orders.map(order => 
-            order.id === id ? { ...order, status: newStatus as Order['status'] } : order
-        );
-        setOrders(updatedOrders);
-        localStorage.setItem('all_orders', JSON.stringify(updatedOrders));
-        toast.success(`Order status updated to ${newStatus}`);
+    // ৫. রিয়েল-টাইম স্ট্যাটাস আপডেট (শিপমেন্ট অপশন সহ)
+    const handleStatusChange = async (dbId: string, newStatus: Order['status']) => {
+        try {
+            const res = await fetch('/api/order', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: dbId, status: newStatus }),
+            });
+
+            if (res.ok) {
+                setOrders(prev => prev.map(order => 
+                    order._id === dbId ? { ...order, status: newStatus } : order
+                ));
+                toast.success(`Status updated to ${newStatus}`);
+            }
+        } catch (error: unknown) {
+            toast.error("Status update failed!");
+        }
     };
 
     return (
-        <div className="px-[5%] lg:px-[12%] py-10 bg-gray-100 min-h-screen">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-8 bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-600">
-                <h1 className="text-2xl font-bold text-gray-800">Admin <span className='text-red-600'>Panel</span></h1>
+        <div className="px-[5%] lg:px-[12%] py-10 bg-gray-50 min-h-screen text-gray-800">
+            {/* Header Area */}
+            <div className="flex justify-between items-center mb-8 bg-white p-5 rounded-2xl shadow-sm border-l-8 border-red-600">
+                <h1 className="text-2xl font-black uppercase tracking-tighter">Admin <span className='text-red-600'>Panel</span></h1>
                 <div className='flex items-center gap-4'>
-                    <span className='font-bold bg-red-100 px-3 py-1 rounded-full text-xs text-red-600 uppercase tracking-wider'>Super Admin</span>
-                    <button onClick={handleLogout} className="bg-gray-800 text-white px-4 py-2 rounded font-bold hover:bg-black text-sm transition">Logout</button>
+                    <span className='font-black bg-black text-white px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest'>Super Admin</span>
+                    <button onClick={handleLogout} className="bg-red-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-black transition-all text-xs uppercase shadow-lg shadow-red-100">Logout</button>
                 </div>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
-                {/* Sidebar */}
-                <div className="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-sm h-fit space-y-2">
-                    <button onClick={()=>setActiveTab('orders')} className={`w-full text-left p-3 rounded-lg font-bold transition-all flex items-center gap-2 ${activeTab === 'orders' ? 'bg-red-600 text-white' : 'hover:bg-gray-50 text-gray-600'}`}>
-                        <FaShoppingBag /> Orders <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${activeTab === 'orders' ? 'bg-white text-red-600' : 'bg-red-600 text-white'}`}>{orders.length}</span>
+                {/* Sidebar Navigation */}
+                <div className="w-full lg:w-1/4 bg-white p-5 rounded-[2rem] shadow-sm h-fit space-y-2 border border-gray-100">
+                    <button onClick={()=>setActiveTab('orders')} className={`w-full text-left p-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'orders' ? 'bg-red-600 text-white shadow-xl shadow-red-100' : 'text-gray-400 hover:bg-gray-50'}`}>
+                        <FaShoppingBag /> Orders Management <span className={`ml-auto px-2 py-0.5 rounded-full text-[9px] ${activeTab === 'orders' ? 'bg-white text-red-600' : 'bg-gray-100'}`}>{orders.length}</span>
                     </button>
-                    <button onClick={()=>setActiveTab('upload')} className={`w-full text-left p-3 rounded-lg font-bold transition-all flex items-center gap-2 ${activeTab === 'upload' ? 'bg-red-600 text-white' : 'hover:bg-gray-50 text-gray-600'}`}>
-                        <FaPlus /> Upload Product
-                    </button>
-                    <button onClick={()=>setActiveTab('products')} className={`w-full text-left p-3 rounded-lg font-bold transition-all flex items-center gap-2 ${activeTab === 'products' ? 'bg-red-600 text-white' : 'hover:bg-gray-50 text-gray-600'}`}>
-                        <FaBoxOpen /> All Products
+                    <button onClick={()=>setActiveTab('upload')} className={`w-full text-left p-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'upload' ? 'bg-red-600 text-white shadow-xl shadow-red-100' : 'text-gray-400 hover:bg-gray-50'}`}>
+                        <FaPlus /> Upload Gadget
                     </button>
                 </div>
 
-                {/* Content Area */}
-                <div className="w-full lg:w-3/4 bg-white p-6 lg:p-8 rounded-lg shadow-sm">
+                {/* Main Content Area */}
+                <div className="w-full lg:w-3/4 bg-white p-6 lg:p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
                     
+                    {/* === ORDERS TAB === */}
                     {activeTab === 'orders' && (
-                        <div>
-                            <h2 className="text-xl font-bold mb-6 border-b pb-2 flex items-center gap-2 text-gray-800">
-                                <FaShoppingBag className="text-red-600"/> Recent Orders
-                            </h2>
+                        <div className="animate-in fade-in duration-500">
+                            <div className="flex justify-between items-center mb-8">
+                                <h2 className="text-xl font-black uppercase tracking-tighter text-gray-800">Recent Shipments</h2>
+                                <button onClick={fetchOrders} className="text-red-600 hover:text-black transition-colors flex items-center gap-2 font-black uppercase text-[10px] tracking-widest">
+                                    <FaSync /> Refresh
+                                </button>
+                            </div>
+                            
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-gray-50 text-gray-600 text-xs uppercase font-black">
-                                            <th className="p-3 border-b">Order ID</th>
-                                            <th className="p-3 border-b">Customer</th>
-                                            <th className="p-3 border-b">Amount</th>
-                                            <th className="p-3 border-b">Status</th>
-                                            <th className="p-3 border-b text-center">Action</th>
+                                        <tr className="bg-gray-50 text-gray-400 text-[10px] font-black uppercase tracking-widest border-b">
+                                            <th className="p-4">Order ID</th>
+                                            <th className="p-4">Customer</th>
+                                            <th className="p-4">Total</th>
+                                            <th className="p-4">Payment</th>
+                                            <th className="p-4">Status</th>
+                                            <th className="p-4 text-center">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="text-sm text-gray-600">
+                                    <tbody className="text-sm font-bold text-gray-600">
                                         {orders.map((order) => (
-                                            <tr key={order.id} className="border-b hover:bg-gray-50 transition">
-                                                <td className="p-3 font-bold text-gray-800">{order.id}</td>
-                                                <td className="p-3">
-                                                    <p className="font-bold">{order.customerName}</p>
-                                                    <p className="text-xs text-gray-400">{order.customerEmail}</p>
+                                            <tr key={order._id} className="border-b last:border-none hover:bg-gray-50/50 transition-all">
+                                                <td className="p-4 font-black text-gray-900">{order.id}</td>
+                                                <td className="p-4">
+                                                    <p className="font-black text-gray-800 uppercase text-xs">{order.customerName}</p>
+                                                    <p className="text-[10px] text-gray-400 font-bold">{order.customerPhone}</p>
                                                 </td>
-                                                <td className="p-3 font-bold text-red-600">৳{order.total}</td>
-                                                <td className="p-3">
-                                                    <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase
+                                                <td className="p-4 text-red-600 font-black">৳{order.total.toLocaleString()}</td>
+                                                <td className="p-4">
+                                                    <p className="text-[10px] font-black uppercase tracking-tighter leading-tight">{order.paymentMethod}</p>
+                                                    <p className="text-[9px] text-blue-500 font-black tracking-widest uppercase mt-1">Trx: {order.txnId || "N/A"}</p>
+                                                </td>
+                                                <td className="p-4">
+                                                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase shadow-sm
                                                         ${order.status === 'Delivered' ? 'bg-green-100 text-green-600' : 
+                                                          order.status === 'Shipped' ? 'bg-purple-100 text-purple-600' : 
                                                           order.status === 'Cancelled' ? 'bg-red-100 text-red-600' : 
                                                           order.status === 'Processing' ? 'bg-blue-100 text-blue-600' : 'bg-yellow-100 text-yellow-600'}`}>
                                                         {order.status}
                                                     </span>
                                                 </td>
-                                                <td className="p-3 text-center">
+                                                <td className="p-4 text-center">
                                                     <select 
-                                                        className="border p-1 rounded text-xs outline-none cursor-pointer bg-white font-bold"
+                                                        className="border-2 border-gray-100 p-1.5 rounded-xl text-[10px] font-black uppercase outline-none cursor-pointer focus:border-red-600 transition-all bg-white"
                                                         value={order.status}
-                                                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                                        onChange={(e) => handleStatusChange(order._id, e.target.value as Order['status'])}
                                                     >
                                                         <option value="Pending">Pending</option>
                                                         <option value="Processing">Processing</option>
+                                                        <option value="Shipped">Shipped</option>
                                                         <option value="Delivered">Delivered</option>
                                                         <option value="Cancelled">Cancelled</option>
                                                     </select>
@@ -222,42 +245,40 @@ const AdminDashboard = ({ handleLogout }: Props) => {
                                         ))}
                                     </tbody>
                                 </table>
+                                {orders.length === 0 && <p className="text-center py-20 text-gray-300 font-black uppercase text-xs tracking-widest">No orders found.</p>}
                             </div>
                         </div>
                     )}
 
+                    {/* === UPLOAD PRODUCT TAB === */}
                     {activeTab === 'upload' && (
-                        <div>
-                            <h2 className="text-xl font-bold mb-6 border-b pb-2 text-gray-800 flex items-center gap-2">
-                                <FaPlus className='text-red-600'/> Add New Product
-                            </h2>
-                            <form onSubmit={handleProductUpload} className="space-y-5">
+                        <div className="animate-in slide-in-from-bottom-5 duration-500">
+                            <h2 className="text-xl font-black uppercase tracking-tighter text-gray-800 mb-8 border-b pb-4">Add New Gadget</h2>
+                            <form onSubmit={handleProductUpload} className="space-y-6">
                                 
-                                {/* Image Upload Field */}
-                                <div className="bg-gray-50 p-6 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center">
+                                {/* Image Upload */}
+                                <div className="bg-gray-50 p-10 rounded-[2rem] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center group hover:border-red-600 transition-all duration-500">
                                     {productData.image ? (
-                                        <div className="relative group">
-                                            <img src={productData.image} alt="Preview" className="h-40 w-40 object-cover rounded-lg shadow-md border" />
-                                            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-lg">
-                                                <label className="text-white text-xs font-bold cursor-pointer">Change Image
-                                                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-                                                </label>
-                                            </div>
+                                        <div className="relative">
+                                            <img src={productData.image} alt="Preview" className="h-40 w-40 object-contain rounded-2xl shadow-xl" />
+                                            <label className="absolute -bottom-2 -right-2 bg-red-600 text-white p-2 rounded-full cursor-pointer shadow-lg active:scale-90 transition-all">
+                                                <FaSync size={12} />
+                                                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                                            </label>
                                         </div>
                                     ) : (
-                                        <label className="flex flex-col items-center justify-center cursor-pointer hover:text-red-600 transition">
-                                            {uploadingImage ? <FaSpinner className="animate-spin text-3xl mb-2 text-red-600" /> : <FaCloudUploadAlt className="text-4xl mb-2 text-gray-400" />}
-                                            <span className="font-bold text-sm text-gray-600">{uploadingImage ? 'Uploading to Server...' : 'Click to Upload Product Image'}</span>
+                                        <label className="flex flex-col items-center justify-center cursor-pointer text-gray-400 group-hover:text-red-600 transition-all">
+                                            {uploadingImage ? <FaSpinner className="animate-spin text-3xl mb-3 text-red-600" /> : <FaCloudUploadAlt className="text-5xl mb-3" />}
+                                            <span className="font-black text-[10px] uppercase tracking-widest">{uploadingImage ? 'Uploading...' : 'Drop Product Image Here'}</span>
                                             <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                                         </label>
                                     )}
                                 </div>
 
-                                {/* Section Selection */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-xs font-black uppercase text-gray-500 mb-1">Display Section</label>
-                                        <select name="section" className="w-full p-3 border rounded-lg outline-none focus:border-red-500 font-bold text-gray-700 bg-white" onChange={handleProductChange} value={productData.section}>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Website Section</label>
+                                        <select name="section" className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" onChange={handleProductChange} value={productData.section}>
                                             <option value="TopSelling">Top Selling Products</option>
                                             <option value="BestDeals">Best Deals</option>
                                             <option value="HotDeals">Hot Deals</option>
@@ -266,93 +287,45 @@ const AdminDashboard = ({ handleLogout }: Props) => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black uppercase text-gray-500 mb-1">Category</label>
-                                        <select name="category" className="w-full p-3 border rounded-lg font-bold bg-white" onChange={handleProductChange} value={productData.category}>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Category</label>
+                                        <select name="category" className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" onChange={handleProductChange} value={productData.category}>
                                             <option value="Mobile Phone">Mobile Phone</option>
                                             <option value="Laptop">Laptop</option>
                                             <option value="Smart Watch">Smart Watch</option>
                                             <option value="Drone">Drone</option>
                                             <option value="Accessories">Accessories</option>
-                                            <option value="Earbuds">Earbuds</option>
-                                            <option value="Camera">Camera</option>
                                         </select>
                                     </div>
-                                </div>
-
-                                {/* Title */}
-                                <div>
-                                    <label className="block text-xs font-black uppercase text-gray-500 mb-1">Product Title</label>
-                                    <input type="text" name="title" required className="w-full p-3 border rounded-lg outline-none focus:border-red-500" placeholder="e.g. iPhone 15 Pro Max" onChange={handleProductChange} value={productData.title} />
-                                </div>
-
-                                {/* Prices & Sale */}
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <label className="block text-xs font-black uppercase text-gray-500 mb-1">Price (৳)</label>
-                                        <input type="text" name="price" required className="w-full p-3 border rounded-lg" placeholder="2990" onChange={handleProductChange} value={productData.price} />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black uppercase text-gray-500 mb-1">Regular Price</label>
-                                        <input type="text" name="lessPrice" className="w-full p-3 border rounded-lg" placeholder="3500" onChange={handleProductChange} value={productData.lessPrice} />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black uppercase text-gray-500 mb-1">Tag (New/Sale)</label>
-                                        <input type="text" name="sale" className="w-full p-3 border rounded-lg" placeholder="New" onChange={handleProductChange} value={productData.sale} />
-                                    </div>
-                                </div>
-
-                                {/* Feature Toggles */}
-                                <div className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border">
-                                    <div>
-                                        <label className="block text-[10px] font-black uppercase mb-1">Fast Charge</label>
-                                        <select name="fastCharging" className="w-full p-2 border rounded text-xs font-bold" onChange={handleProductChange} value={productData.fastCharging}>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-black uppercase mb-1">Wireless</label>
-                                        <select name="wireless" className="w-full p-2 border rounded text-xs font-bold" onChange={handleProductChange} value={productData.wireless}>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-black uppercase mb-1">Water Res.</label>
-                                        <select name="waterResistant" className="w-full p-2 border rounded text-xs font-bold" onChange={handleProductChange} value={productData.waterResistant}>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Description & Features */}
-                                <div>
-                                    <label className="block text-xs font-black uppercase text-gray-500 mb-1">Short Description</label>
-                                    <textarea name="description" rows={3} className="w-full p-3 border rounded-lg resize-none" placeholder="Product short summary..." onChange={handleProductChange} value={productData.description}></textarea>
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-black uppercase text-gray-500 mb-1">Key Features (One per line)</label>
-                                    <textarea name="keyFeatures" rows={4} className="w-full p-3 border rounded-lg resize-none bg-yellow-50 focus:bg-white transition" placeholder="Feature 1&#10;Feature 2" onChange={handleProductChange} value={productData.keyFeatures}></textarea>
+                                    <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Product Title</label>
+                                    <input type="text" name="title" required className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" placeholder="e.g. MacBook Pro M3" onChange={handleProductChange} value={productData.title} />
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Sale Price</label>
+                                        <input type="text" name="price" required className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" placeholder="৳ 2500" onChange={handleProductChange} value={productData.price} />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Old Price</label>
+                                        <input type="text" name="lessPrice" className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" placeholder="৳ 3000" onChange={handleProductChange} value={productData.lessPrice} />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-gray-400 ml-1">Tag (Sale/New)</label>
+                                        <input type="text" name="sale" className="w-full p-4 mt-1 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" placeholder="30% OFF" onChange={handleProductChange} value={productData.sale} />
+                                    </div>
                                 </div>
 
                                 <button 
                                     disabled={loading || uploadingImage} 
-                                    className="w-full py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-black transition disabled:opacity-50 text-lg shadow-lg flex items-center justify-center gap-2"
+                                    className="w-full py-5 bg-red-600 text-white font-black rounded-[1.5rem] hover:bg-black transition-all disabled:opacity-50 text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-200"
                                 >
-                                    {loading ? <FaSpinner className="animate-spin" /> : null}
-                                    {loading ? 'Processing...' : 'Upload Product to Database'}
+                                    {loading ? <FaSpinner className="animate-spin inline mr-2" /> : null}
+                                    {loading ? 'Uploading...' : 'Publish to Store'}
                                 </button>
                             </form>
-                        </div>
-                    )}
-
-                    {activeTab === 'products' && (
-                        <div className="text-center py-20 text-gray-400">
-                            <FaBoxOpen className="text-6xl mb-4 mx-auto opacity-20" />
-                            <p className='font-bold uppercase text-xs tracking-widest'>Database Product List</p>
-                            <p className='text-sm mt-1'>Coming Soon: Product Edit & Delete Management</p>
                         </div>
                     )}
                 </div>
