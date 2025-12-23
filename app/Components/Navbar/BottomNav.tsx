@@ -95,7 +95,7 @@ const BottomNav = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
-  const whatsappNumber = "+8801670424702"; 
+  const whatsappNumber = "8801670424702"; 
   const whatsappMessage = "Hello, I want to know more about your products.";
 
   const toggleDropDowns = (label: string) => {
@@ -228,10 +228,7 @@ const BottomNav = () => {
             )}
           </nav>
 
-          {/* রাইট সাইড: হোয়াটসঅ্যাপ, সার্চ অথবা আইকনসমূহ */}
           <div className="flex items-center gap-4 justify-end relative">
-              
-              {/* ১. স্টিকি হলে কার্ট ও উইশলিস্ট দেখাবে (ডেক্সটপ ও মোবাইল উভয় জায়গায়) */}
               {isFixed ? (
                 <div className="flex items-center gap-5 animate-in fade-in duration-300">
                     <Link href='/UI-Components/Pages/wishlist' className='relative text-gray-700 hover:text-red-600 transition-colors'>
@@ -249,10 +246,7 @@ const BottomNav = () => {
                     </Link>
                 </div>
               ) : (
-                /* ২. স্টিকি না হলে যা দেখাবে */
                 <div className="flex items-center gap-3">
-                    
-                    {/* মোবাইল ভিউতে সার্চ (lg:hidden) */}
                     <div className='lg:hidden flex items-center relative'>
                        {isSearchOpen ? (
                           <div className="flex items-center bg-gray-100 rounded-full px-3 py-1 border border-gray-200 animate-in fade-in slide-in-from-right-2">
@@ -272,13 +266,12 @@ const BottomNav = () => {
                        )}
                     </div>
 
-                    {/* ডেক্সটপ হোয়াটসঅ্যাপ বাটন */}
                     <div className="hidden lg:block">
                          <a 
                             href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="nav-button cursor-pointer font-bold bg-red-600 text-white px-5 py-2 rounded flex items-center transition-transform hover:scale-105 gap-2"
+                            className="nav-button cursor-pointer font-bold bg-red-600 text-white px-5 py-2 rounded flex items-center transition-transform hover:scale-105 gap-2 uppercase text-[10px] tracking-widest"
                          >
                              <i className='bi bi-whatsapp text-xl'></i> 01670424702
                          </a>
@@ -286,12 +279,11 @@ const BottomNav = () => {
                 </div>
               )}
 
-              {/* সার্চ ড্রপডাউন রেজাল্ট */}
               {query && isSearchOpen && !isFixed && (
                   <div className="absolute top-full right-0 w-64 bg-white shadow-2xl mt-2 rounded-2xl overflow-hidden border border-gray-100 z-[2000] lg:hidden">
                       {filteredProducts.map((p, i) => (
                           <Link key={i} href={`/UI-Components/Shop?id=${p._id || p.Id}`} onClick={() => {setQuery(""); setIsSearchOpen(false);}}>
-                              <div className="flex items-center gap-3 p-3 border-b border-gray-50 hover:bg-gray-50">
+                              <div className="flex items-center gap-3 p-3 border-b border-gray-50 hover:bg-gray-50 transition-all">
                                   <div className="w-8 h-8 relative shrink-0">
                                       <img src={p.image} className="w-full h-full object-contain" alt="" />
                                   </div>
@@ -305,7 +297,6 @@ const BottomNav = () => {
 
         </div>
 
-        {/* মোবাইল মেনু ড্রপডাউন */}
         <div 
           className={`
             lg:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t z-40 
@@ -332,7 +323,7 @@ const BottomNav = () => {
                             key={item.label}
                             href={item.href}
                             onClick={() => setMobileMenuOpen(false)} 
-                            className="block py-2 text-xs font-bold text-gray-600 hover:text-red-600"
+                            className="block py-2 text-xs font-bold text-gray-500 hover:text-red-600"
                           >
                             {item.label}
                           </Link>
@@ -351,6 +342,18 @@ const BottomNav = () => {
                 )}
               </div>
             ))}
+
+            {/* === মোবাইল মেনুর নিচে WhatsApp Connect বাটন === */}
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <a 
+                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`} 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 className="flex items-center justify-center gap-3 font-black text-white bg-red-600 py-4 rounded-2xl shadow-lg uppercase text-xs tracking-widest active:scale-95 transition-all"
+              >
+                <i className='bi bi-whatsapp text-xl'></i> WhatsApp Connect
+              </a>
+            </div>
           </div>
         </div>
       </div>

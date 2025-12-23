@@ -263,3 +263,21 @@
 .brands-swiper .swiper-wrapper {
   transition-timing-function: linear !important;
 }
+
+/* মোবাইল ডিভাইসে টেক্সট এবং গ্যাপ অপ্টিমাইজেশন */
+@media (max-width: 640px) {
+  .unbounded {
+    font-size: 1.5rem !important; /* মোবাইলে টাইটেল খুব বেশি বড় হবে না */
+  }
+  
+  .section-padding {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* ইমেজ যাতে কন্টেইনারের বাইরে না যায় */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

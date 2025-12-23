@@ -175,7 +175,7 @@ const ShortProducts = () => {
 
     return (
         <div className="px-[5%] lg:px-[12%] py-16 bg-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 
                 {/* প্রত্যেক কলামে আলাদা ফিক্সড ডিলে পাঠানো হয়েছে (Impure Function Fix) */}
                 <ProductColumn title="Featured Items" products={sections.featured} delay={3000} />

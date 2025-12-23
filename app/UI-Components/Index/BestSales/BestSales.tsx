@@ -122,58 +122,40 @@ const BestSales = () => {
         
         <div className="flex flex-col lg:flex-row items-stretch gap-8">
             
-            {/* বাম পাশ: প্রোডাক্ট গ্রিড */}
-            <div className='w-full lg:w-2/3'>
-                {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {[1, 2, 3, 4].map(i => <div key={i} className="bg-gray-50 animate-pulse rounded-[2rem] h-[180px]"></div>)}
+            
+            {/* // BestSales.tsx এর গ্রিড অংশটি এভাবে পরিবর্তন করুন: */}
+<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-3 md:gap-8">
+    {allBestSales.map((product) => {
+        const uniqueID = getSafeId(product);
+        return (
+            <div key={uniqueID} className="group flex flex-col md:flex-row bg-white border border-gray-100 rounded-[1.5rem] md:rounded-[2rem] p-3 md:p-4 shadow-sm hover:shadow-xl transition-all duration-500 relative h-full items-center">
+                
+                {/* ইমেজ সেকশন: মোবাইলে উপরে, ডেক্সটপে বামে */}
+                <div className="w-full md:w-[35%] aspect-square relative flex items-center justify-center bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden p-2">
+                    <img src={product.image} alt={product.title} className='max-h-full max-w-full object-contain transition-transform duration-700 group-hover:scale-110' />
+                </div>
+
+                {/* কন্টেন্ট সেকশন */}
+                <div className="w-full md:w-[65%] mt-3 md:mt-0 md:pl-4 flex flex-col justify-center text-center md:text-left">
+                    <h3 className="text-[10px] md:text-[13px] font-bold text-gray-800 line-clamp-1 md:line-clamp-2 uppercase leading-tight mb-1">{product.title}</h3>
+                    
+                    <div className="flex items-center justify-center md:justify-start gap-1 text-yellow-400 text-[8px] md:text-[10px] mb-2">
+                        <FaStar /> <span className="text-gray-400 font-bold">{product.review || "4.5"}</span>
                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {allBestSales.map((product) => {
-                            const uniqueID = getSafeId(product);
-                            return (
-                                <div key={uniqueID} className="group flex bg-white border border-gray-100 rounded-[2rem] p-3 shadow-sm hover:shadow-xl transition-all duration-500 hover:border-red-100 relative h-full items-center">
-                                    
-                                    {/* উইশলিস্ট বাটন */}
-                                    <button onClick={() => handleAddToWishlist(product)} className="absolute top-4 right-4 text-gray-300 hover:text-red-600 transition-colors z-10">
-                                        <FaHeart className="text-sm" />
-                                    </button>
 
-                                    {/* ইমেজ (বাম পাশে ছোট সাইজ) */}
-                                    <div className="w-[35%] aspect-square relative flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden p-2">
-                                        <img src={product.image} alt={product.title} className='max-h-full max-w-full object-contain transition-transform duration-700 group-hover:scale-110' />
-                                        {product.sale && (
-                                            <span className="absolute top-0 left-0 px-2 py-0.5 font-black text-[7px] uppercase text-white rounded-br-lg bg-red-600 shadow-sm">{product.sale}</span>
-                                        )}
-                                    </div>
-
-                                    {/* কন্টেন্ট (ডান পাশে টাইট স্পেসিং) */}
-                                    <div className="w-[65%] pl-4 flex flex-col justify-center">
-                                        <Link href={`/UI-Components/Shop?id=${uniqueID}`}>
-                                            <h3 className="text-[12px] font-bold text-gray-800 line-clamp-1 hover:text-red-600 transition-colors uppercase leading-none mb-1.5">{product.title}</h3>
-                                            
-                                            <div className="flex items-center gap-0.5 text-yellow-400 text-[9px] mb-2">
-                                                {[...Array(5)].map((_, i) => <FaStar key={i} />)}
-                                                <span className="text-gray-400 font-bold ml-1">{product.review || "4.5"}</span>
-                                            </div>
-
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <span className="text-lg font-black text-red-600 tracking-tighter leading-none">{formatPrice(product.price)}</span>
-                                                {product.lessPrice && <span className="text-[9px] text-gray-400 line-through font-bold">{formatPrice(product.lessPrice)}</span>}
-                                            </div>
-                                        </Link>
-
-                                        <button onClick={() => handleAddToCart(product)} className="w-full py-2 bg-black text-white text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-red-600 transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
-                                            Add to Bag <FaCartPlus className="text-xs" />
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                    <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 mb-3">
+                        <span className="text-sm md:text-xl font-black text-red-600 tracking-tighter leading-none">{formatPrice(product.price)}</span>
+                        {product.lessPrice && <span className="text-[8px] md:text-[10px] text-gray-400 line-through font-bold">{formatPrice(product.lessPrice)}</span>}
                     </div>
-                )}
+
+                    <button onClick={() => handleAddToCart(product)} className="w-full py-2 bg-black text-white text-[9px] font-black uppercase rounded-lg hover:bg-red-600 transition-all active:scale-95">
+                        Add <FaCartPlus className="inline ml-1" />
+                    </button>
+                </div>
             </div>
+        );
+    })}
+</div>
 
             {/* ডান পাশ: প্রিমিয়াম ব্যানার */}
             <div className="w-full lg:w-1/3">

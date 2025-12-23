@@ -146,12 +146,13 @@ const NewArrivals = () => {
                     loop={allNewArrivals.length > 4}
                     autoplay={{ delay: 3500, disableOnInteraction: false }}
                     modules={[Autoplay, Pagination]}
-                    breakpoints={{ 
-                        1200: { slidesPerView: 4 },
-                        991: { slidesPerView: 3 },
-                        768: { slidesPerView: 2 },
-                        0: { slidesPerView: 1.2 } 
-                    }}
+                    // স্লাইডারের ব্রেকপয়েন্ট এই অংশটুকু আপডেট করুন:
+breakpoints={{
+  1200: { slidesPerView: 5 },
+  991: { slidesPerView: 3 },
+  768: { slidesPerView: 2.5 },
+  0: { slidesPerView: 1.5, spaceBetween: 15 } // মোবাইলে ১.৫টি স্লাইড দেখাবে
+}}
                     className='h-full !pb-12'
                 >
                     {allNewArrivals.map((product, index) => {

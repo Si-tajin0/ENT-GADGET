@@ -41,7 +41,7 @@ const Hero = () => {
                             <span className="inline-block bg-red-100 text-red-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6 animate-pulse">
                                 Premium Audio
                             </span>
-                            <h1 className="unbounded text-4xl md:text-6xl lg:text-[4.2rem] font-black leading-[1.1] text-black tracking-tighter mb-6">
+                            <h1 className="unbounded text-2xl md:text-5xl lg:text-[4.2rem] font-black leading-tight text-black tracking-tighter mb-4">
                                 HAYLOU S40 <br />  
                                 <span className="text-red-600">Wireless</span> Pro.
                             </h1>
@@ -54,7 +54,7 @@ const Hero = () => {
                                         Shop Now <i className="bi bi-arrow-right ml-2"></i>
                                     </button>
                                 </Link>
-                                <button className="px-10 py-4 rounded-xl text-black font-black bg-white border-2 border-gray-100 hover:border-red-600 transition-all duration-500 cursor-pointer uppercase text-xs tracking-widest">
+                                <button className="px-6 md:px-10 py-3 md:py-4 rounded-xl text-white font-black bg-red-600 text-[10px] md:text-xs uppercase tracking-widest">
                                     View Specs
                                 </button>
                             </div>

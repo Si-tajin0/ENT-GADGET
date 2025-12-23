@@ -58,7 +58,7 @@ const Footer = () => {
       <div className="absolute -top-24 -left-24 w-64 h-64 bg-red-600 rounded-full blur-[120px] opacity-20"></div>
 
       {/* === Main Container === */}
-      <div className="flex flex-col xl:flex-row gap-16 xl:gap-24 relative z-10">
+      <div className="flex flex-col xl:flex-row gap-12 text-center md:text-left items-center md:items-start">
         
         {/* --- Left Side: Brand & Contact --- */}
         <div className="flex flex-col gap-8 w-full xl:w-1/3">
