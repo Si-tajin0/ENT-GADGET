@@ -1,0 +1,57 @@
+[
+    {
+        "Id" : "Arraival1",
+        "image" : "/images/arrival-img1.webp",
+        "title" : "SoundBox Pro Portable",
+        "price" : "৳ 21.67",
+        "lessPrice" : "৳ 29.80",
+        "review" : "(5k)",
+        "ctg" : "Computer & Gaming",
+        "sold" : "18/35",
+        "sale" : "New"
+     },
+    {
+        "Id" : "Arraival2",
+        "image" : "/images/arrival-img2.webp",
+        "title" : "Polk Audio T30 Speaker",
+        "price" : "৳ 22.40",
+        "lessPrice" : "৳ 32.89",
+        "review" : "(10k)",
+        "ctg" : "Accesories",
+        "sold" : "22/40",
+        "sale" : "30%"
+    },
+    {
+        "Id" : "Arraival3",
+        "image" : "/images/arrival-img3.webp",
+        "title" : "Numkuda USB 2.0 Gamepad",
+        "price" : "৳ 19.35",
+        "lessPrice" : "৳ 30.45",
+        "review" : "(9k)",
+        "ctg" : "Home Appliance",
+        "sold" : "22/40",
+        "sale" : "80%"
+    },
+    {
+        "Id" : "Arraival4",
+        "image" : "/images/arrival-img4.webp",
+        "title" : "Taylor Farms Broccoli Florets Fruits",
+        "price" : "৳ 24.54",
+        "lessPrice" : "৳ 39.56",
+        "review" : "(6k)",
+        "ctg" : "Computer & Gaming",
+        "sold" : "15/25",
+        "sale" : "New"
+    },
+    {
+        "Id" : "Arraival5",
+        "image" : "/images/arrival-img5.webp",
+        "title" : "Edifier H840 Audiophile",
+        "price" : "৳ 21.34",
+        "lessPrice" : "৳ 23.90",
+        "review" : "(8k)",
+        "ctg" : "Mobile Phone",
+        "sold" : "18/35",
+        "sale" : "40%"
+    }
+]

@@ -1,0 +1,181 @@
+{
+  "Featured": [
+    {
+      "Id": 1,
+      "image": "/images/short-product-img1.webp",
+      "title": "Xbox One Wireless Controller",
+      "price": "$59.00",
+      "lessprice": "৳ 70.00",
+      "reviews": "(15 Reviews)"
+    },
+    {
+      "Id": 2,
+      "image": "/images/short-product-img2.jpg",
+      "title": "Logitech G502 Gaming Mouse",
+      "price": "৳ 45.00",
+      "lessprice": "",
+      "reviews": "(205 Reviews)"
+    },
+    {
+      "Id": 3,
+      "image": "/images/short-product-img3.webp",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "$350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 4,
+      "image": "/images/short-product-img4.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳ 350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 5,
+      "image": "/images/short-product-img5.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "$350.00",
+      "reviews": "(1.2k Reviews)"
+    }
+  ],
+  "OnSale": [
+    {
+      "Id": 1,
+      "image": "/images/short-product-img7.jpg",
+      "title": "Xbox One Wireless Controller",
+      "price": "৳ 59.00",
+      "lessprice": "৳ 70.00",
+      "reviews": "(15 Reviews)"
+    },
+    {
+      "Id": 2,
+      "image": "/images/short-product-img8.jpg",
+      "title": "Logitech G502 Gaming Mouse",
+      "price": "৳ 45.00",
+      "lessprice": "",
+      "reviews": "(205 Reviews)"
+    },
+    {
+      "Id": 3,
+      "image": "/images/short-product-img9.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳ 350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 4,
+      "image": "/images/short-product-img10.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳ 350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 5,
+      "image": "/images/short-product-img11.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳ 350.00",
+      "reviews": "(1.2k Reviews)"
+    }
+  ],
+  "TopRated": [
+    {
+      "Id": 1,
+      "image": "/images/top-rated-01.jpg",
+      "title": "Xbox One Wireless Controller",
+      "price": "৳ 59.00",
+      "lessprice": "৳ 70.00",
+      "reviews": "(15 Reviews)"
+    },
+    {
+      "Id": 2,
+      "image": "/images/top-rated-02.jpg",
+      "title": "Logitech G502 Gaming Mouse",
+      "price": "৳ 45.00",
+      "lessprice": "",
+      "reviews": "(205 Reviews)"
+    },
+    {
+      "Id": 3,
+      "image": "/images/top-rated-03.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳ 350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 4,
+      "image": "/images/top-rated-04.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳350.00",
+      "reviews": "(1.2k Reviews)"
+    },
+    {
+      "Id": 5,
+      "image": "/images/top-rated-05.jpg",
+      "title": "Sony WH-1000XM4 Headphones",
+      "price": "৳ 299.00",
+      "lessprice": "৳350.00",
+      "reviews": "(1.2k Reviews)"
+    }
+  ],
+
+  "TopSelling": [
+    {
+        "Id" : "TopSelling1",
+        "image" : "/images/product-img1.webp",
+        "title" : "Speak 710 Portable Speaker for Music and Calls",
+        "price" : "৳ 17.67",
+        "lessPrice" : "৳ 99.80",
+        "review" : "(5k)",
+        "sold" : "18/35",
+        "sale" : ""
+    },
+    {
+        "Id" : "TopSelling2",
+        "image" : "/images/product-img2.webp",
+        "title" : "Rustic Granite Gloves Robot Vacuum ZUSG4061 1600W",
+        "price" : "৳ 336.40",
+        "lessPrice" : "",
+        "review" : "(10k)",
+        "sold" : "22/40",
+        "sale" : "50%"
+    },
+    {
+        "Id" : "TopSelling3",
+        "image" : "/images/product-img3.webp",
+        "title" : "Blender Combo with Single Serve Cups",
+        "price" : "৳ 788.35",
+        "lessPrice" : "",
+        "review" : "(9k)",
+        "sold" : "22/40",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling4",
+         "image" : "/images/product-img4.webp",
+        "title" : "Foot Portable Mini Washing Machine, White",
+        "price" : "৳ 985.54",
+        "lessPrice" : "",
+        "review" : "(6k)",
+        "sold" : "15/25",
+        "sale" : "35%"
+    },
+    {
+        "Id" : "TopSelling5",
+         "image" : "/images/product-img5.webp",
+        "title" : "5G Unlocked Cell Phone 6.6″ Prism Dot Black 128GB",
+        "price" : "৳ 201.34",
+        "lessPrice" : "৳ 762.90",
+        "review" : "(8k)",
+        "sold" : "18/35",
+        "sale" : ""
+    }
+  ]
+}

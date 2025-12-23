@@ -1,0 +1,46 @@
+[
+    {
+        "Id" : "BestSales1",
+        "image" : "/images/best-sell1.webp",
+        "title" : "SoundBox Pro Portable",
+        "price" : "৳ 29.51.67",
+        "lessPrice" : "৳ 99.80",
+        "review" : "(5k)",
+        "ctg" : "Computer & Gaming",
+        "sold" : "18/35",
+        "sale" : "New"
+    },
+    {
+        "Id" : "BestSales2",
+        "image" : "/images/best-sell2.webp",
+        "title" : "Polk Audio T30 Speaker",
+        "price" : "৳ 18.99",
+        "lessPrice" : "",
+        "review" : "(10k)",
+        "ctg" : "Accesories",
+        "sold" : "22/40",
+        "sale" : "30%"
+    },
+    {
+        "Id" : "BestSales3",
+        "image" : "/images/best-sell3.webp",
+        "title" : "Taylor Farms Broccoli Florets Vegetables",
+        "price" : "৳ 28.35",
+        "lessPrice" : "",
+        "review" : "(9k)",
+        "ctg" : "Home Appliance",
+        "sold" : "22/40",
+        "sale" : "New"
+    },
+    {
+        "Id" : "BestSales4",
+        "image" : "/images/best-sell4.webp",
+        "title" : "Taylor Farms Broccoli Florets Fruits",
+        "price" : "৳ 25.54",
+        "lessPrice" : "",
+        "review" : "(6k)",
+        "ctg" : "Computer & Gaming",
+        "sold" : "15/25",
+        "sale" : "45%"
+    }
+]

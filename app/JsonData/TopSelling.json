@@ -1,0 +1,147 @@
+[
+    {
+        "Id" : "TopSelling1",
+        "image" : "/images/top-selling1.jpg",
+        "title" : "Soundpeats RunFree Lite2 Air Conduction Sport Open-Ear Headphone 💥💥",
+        "price" : "৳ 2990 ",
+        "lessPrice" : "৳ 3499",
+        "ctg": "Earbuds",
+    "sale": "New",
+    "review": "5",
+    "sold": "7/18",
+    "fastCharging": "Yes",
+    "Wireless": "Yes",
+    "waterResistant": "Yes",
+    "description": " The SoundPEATS RunFree Lite2 Open-Ear Air Conduction Sport Neckband provides the ideal combination of comfort and high-quality audio for your active lifestyle. These earbuds include an open-ear design that provides all-day comfort while keeping you aware of your surroundings. Experience excellent Hi-Res audio with deep bass to enhance your music and audio material. Enjoy robust dual-device connectivity thanks to Bluetooth 5.3 technology, which allows you to smoothly move between devices. With up to 15 hours of continuous playback on a single charge, you may listen to music uninterrupted throughout the day. The earphones also provide crystal clear transmission, resulting in crisp conversations with improved bass. The SoundPEATS RunFree Lite 2 provides long-lasting comfort, an outstanding audio experience, and dependable connection all in one sleek and athletic neckband design. ",
+    "keyFeatures": [
+        "💢16.2mm Dynamic Driver ",
+        "💢Up to 15Hours Playback",
+        "💢Dual Mic For Noice Cancellation "
+        
+    ]
+    },
+    {
+        "Id" : "TopSelling2",
+        "image" : "/images/top-selling2.jpg",
+        "title" : "Kospet TANK T3 ULTRA 2 IP 69K & 5 ATM Dive-proof (Special Edition) Dual Strap ( Silver ) 💥💥",
+        "price" : "৳ 10,900 ",
+        "lessPrice" : "৳ 12,500",
+        "ctg": "Smart Watch",
+    "sale": "New",
+    "review": "9",
+    "sold": "7/15",
+    "fastCharging": "Yes",
+    "Wireless": "Yes",
+    "waterResistant": "Yes",
+    "description": " KOSPET TANK T3 ULTRA 2 Smart Watch - Special Edition If you're hunting down a smartwatch that laughs in the face of danger and wears scratches like battle scars, meet your new wrist-side warrior — the KOSPET TANK T3 ULTRA 2 Special Edition. Built like a mini mech suit, this beast rocks a fireproof stainless steel shell, Gorilla Glass display, and 15 military-grade certifications. Whether you're hiking cliffs or fighting deadlines, its dual-band GPS and six-satellite support keep your location on point.The AMOLED display stays sharp in sunlight, and the strap? A rugged metal-silicone combo made for real-world chaos. Track over 170 sports, take calls like a commander, monitor your vitals, and stay juiced up for up to two weeks. Add Bluetooth 5.3, voice assistant, altimeter, and an always-on mode for the flex. This isn’t just a smartwatch, it’s a tactical upgrade for your lifestyle.",
+    "keyFeatures": [
+        "◾ Dual-band & 6 Satellite Positioning Systems",
+        "◾ 15 U.S. MIL-STD-810H Certifications & Passed 28 Reliable Internal Tests",
+        "◾ Full Stainless Steel Body & Corning® Gorilla® Glass Screen",
+        "◾ Barometric Pressure and Altitude Measurements & Built-in Compass",
+        "◾ 170+ Sports Modes & Smart Recognition",
+        "◾ 5 ATM & IP69K (Dive-proof) Water-resistance"
+        
+    ]
+    },
+    {
+        "Id" : "TopSelling3",
+        "image" : "/images/product-img3.webp",
+        "title" : "Blender Combo with Single Serve Cups",
+        "price" : "৳ 788.35",
+        "lessPrice" : "",
+        "review" : "(9k)",
+        "sold" : "22/40",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling4",
+         "image" : "/images/product-img4.webp",
+        "title" : "Foot Portable Mini Washing Machine, White",
+        "price" : "৳ 985.54",
+        "lessPrice" : "",
+        "review" : "(6k)",
+        "sold" : "15/25",
+        "sale" : "35%"
+    },
+    {
+        "Id" : "TopSelling5",
+         "image" : "/images/product-img5.webp",
+        "title" : "5G Unlocked Cell Phone 6.6″ Prism Dot Black 128GB",
+        "price" : "৳ 201.34",
+        "lessPrice" : "$762.90",
+        "review" : "(8k)",
+        "sold" : "18/35",
+        "sale" : ""
+    },
+    {
+        "Id" : "TopSelling6",
+        "image" : "/images/product-img6.webp",
+        "title" : "Microwave oven With Display / Silver Handle",
+        "price" : "৳ 275.14",
+        "lessPrice" : "",
+        "review" : "(17k)",
+        "sold" : "25/40",
+        "sale" : "50%"
+    },
+    {
+        "Id" : "TopSelling7",
+        "image" : "/images/product-img7.webp",
+        "title" : "4G LTE Unlocked Cell Phone 6.5″ Black 32GB",
+        "price" : "৳ 39.67",
+        "lessPrice" : "$52.80",
+        "review" : "(17k)",
+        "sold" : "30/50",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling8",
+        "image" : "/images/product-img8.jpg",
+        "title" : "17.3″ HD+ Touchscreen, Intel Core i7-1165G7 Processor",
+        "price" : "৳ 521.67",
+        "lessPrice" : "",
+        "review" : "(17k)",
+        "sold" : "12/20",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling9",
+        "image" : "/images/product-img9.jpg",
+        "title" : "12,000 BTU Air Conditioner with Remote Control",
+        "price" : "৳ 336.45",
+        "lessPrice" : "",
+        "review" : "(15k)",
+        "sold" : "14/28",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling10",
+        "image" : "/images/product-img10.webp",
+        "title" : "M515 Thin and Light Laptop 16GB DDR4 RAM",
+        "price" : "৳ 14.67",
+        "lessPrice" : "৳ 29.80",
+        "review" : "(13k)",
+        "sold" : "20/40",
+        "sale" : "50%"
+    },
+    {
+        "Id" : "TopSelling7",
+        "image" : "/images/product-img7.webp",
+        "title" : "4G LTE Unlocked Cell Phone 6.5″ Black 32GB",
+        "price" : "৳ 39.67",
+        "lessPrice" : "৳ 52.80",
+        "review" : "(17k)",
+        "sold" : "30/50",
+        "sale" : "New"
+    },
+    {
+        "Id" : "TopSelling4",
+         "image" : "/images/product-img4.webp",
+        "title" : "Foot Portable Mini Washing Machine, White",
+        "price" : "৳ 985.54",
+        "lessPrice" : "",
+        "review" : "(6k)",
+        "sold" : "15/25",
+        "sale" : "35%"
+    }
+]
