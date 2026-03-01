@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 ENT Gadget - Premium Tech E-commerce Store
 
-## Getting Started
+**ENT Gadget** is a high-end, fully functional e-commerce platform built for tech enthusiasts. It offers a seamless shopping experience with a modern UI, real-time database synchronization, and professional order management systems.
 
-First, run the development server:
+🌐 **Live Demo:** [https://www.entgadgetbd.com/](https://www.entgadgetbd.com/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🛒 User Experience
+- **Premium UI:** Built with a "Red & Black" luxury theme using the **Unbounded** typeface.
+- **Dynamic Shopping Cart:** Add products from both local JSON and MongoDB database without any duplication.
+- **Persistent Wishlist:** Save your favorite gadgets for later.
+- **Smart Search:** Search products across all categories with instant dropdown results.
+- **Real-time Tracking:** Users can track their order status (Pending → Processing → Shipped → Delivered) directly from their dashboard.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 💳 Advanced Checkout System
+- **Location-based Shipping:** Automatic delivery charge calculation (৳100 for Dhaka, ৳150 outside).
+- **Coupon System:** Apply promo codes (e.g., `ENTFREE`) for free delivery.
+- **COD Advance Logic:** Special condition for Cash on Delivery requiring ৳100 advance payment with TxnID verification.
+- **Digital Invoice:** Professional automated invoice generation with a "Download/Print PDF" option.
 
-## Learn More
+### 🛡️ Admin & Backend
+- **Admin Dashboard:** Robust panel to upload products, manage stock, and update order statuses in real-time.
+- **Email Notifications:** Professional HTML email invoices sent to both Admin and Customer via **Nodemailer**.
+- **Secure Authentication:** Custom Login/Signup system with role-based access (Admin/User).
+- **Image Hosting:** Integrated with **ImgBB API** for fast and reliable image storage.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Database:** MongoDB (Atlas) with Mongoose
+- **Styling:** Tailwind CSS
+- **Icons:** React Icons & Bootstrap Icons
+- **Animations:** Swiper.js & Framer Motion (Transitions)
+- **Mailing:** Nodemailer (SMTP)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚙️ Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To run this project locally, you will need to add the following variables to your `.env.local` file:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_gmail_app_password
+ADMIN_EMAIL=your_admin_receiver_email
+NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
+NEXT_PUBLIC_ADMIN_WHATSAPP=your_whatsapp_number
