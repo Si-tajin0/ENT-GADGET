@@ -13,20 +13,23 @@ type OfferItem = {
     ctg: string; 
     category: string; 
     classname?: string;
+    coupon?: string;
 }
 
-const OfferData: OfferItem[] = [
+const OfferData: OfferItem[] =[
     {
         image: offer1, 
         title: 'UP TO 30% OFF \n ON HEADPHONES', 
         ctg: 'Limited Offer', 
-        category: 'Headphone'
+        category: 'Headphone',
+        coupon: 'AUDIO30' // নতুন যোগ করা হলো
     },
     {
         image: offer2, 
         title: 'DUALSENSE WIRELESS \n CONTROLLER', 
         ctg: 'Gaming Zone', 
-        category: 'Gaming Console'
+        category: 'Gaming Console',
+        coupon: 'GAME20' // নতুন যোগ করা হলো
     },
 ];
 
@@ -75,9 +78,21 @@ const OfferBanner = () => {
                         </Link>
                     </div>
 
-                    {/* === প্লাস সার্কেল (মাউস নিলে লাল হবে) === */}
-                    <div className="absolute top-8 right-8 w-14 h-14 border-2 border-white/20 rounded-full flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 group-hover:border-red-600 group-hover:bg-red-600/10 transition-all duration-500">
-                        <i className="bi bi-plus-lg text-white group-hover:text-red-600 text-2xl transition-colors duration-500"></i>
+                    {/* === ম্যাজিক প্লাস সার্কেল (Secret Coupon Reveal) === */}
+                    <div className="absolute top-8 right-8 z-20 group/plus cursor-pointer opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <div className="flex items-center justify-end bg-black/40 backdrop-blur-md border-2 border-white/20 rounded-full h-14 overflow-hidden hover:border-red-600 hover:bg-red-600/20 transition-all duration-500 shadow-xl">
+                            
+                            {/* লুকানো কুপন টেক্সট (হোভার করলে স্লাইড হয়ে বের হবে) */}
+                            <span className="w-0 overflow-hidden group-hover/plus:w-[110px] transition-all duration-500 text-white text-[10px] font-black uppercase tracking-widest whitespace-nowrap pl-0 group-hover/plus:pl-4">
+                                Coupon: {offer.coupon}
+                            </span>
+                            
+                            {/* প্লাস আইকন (হোভার করলে ঘুরবে) */}
+                            <div className="w-14 h-14 flex items-center justify-center shrink-0">
+                                <i className="bi bi-plus-lg text-white group-hover/plus:rotate-90 group-hover/plus:text-red-500 text-2xl transition-all duration-500"></i>
+                            </div>
+                            
+                        </div>
                     </div>
 
                     {/* কোণায় ছোট এনিমেশন ডেকোরেশন */}

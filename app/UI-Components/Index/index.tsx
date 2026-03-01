@@ -22,13 +22,13 @@ const Index = () => {
         <Banners/>
         <Deals/>
         <OfferBanner/>
-        <TopSelling/>
+        <NewArrivals/>
         <HotDeals/>
         <BestSales/>
         <Banner/>
         <ShortProducts/>
         <Brands/>
-        <NewArrivals/>
+        <TopSelling/>
         <Benefits/>
     </>
   )
