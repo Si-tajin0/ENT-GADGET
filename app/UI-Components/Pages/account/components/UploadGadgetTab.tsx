@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaSpinner, FaCloudUploadAlt, FaSync, FaMagic } from 'react-icons/fa';
+import { FaSpinner, FaCloudUploadAlt, FaSync, FaMagic, FaFire, FaMoneyBillWave } from 'react-icons/fa';
 
 interface ProductForm {
     title: string; price: string; category: string; image: string; sale: string;
@@ -14,7 +14,8 @@ interface ProductForm {
 const UploadGadgetTab = () => {
     const [loading, setLoading] = useState(false);
     const [uploadingImage, setUploadingImage] = useState(false);
-    const [generatingAI, setGeneratingAI] = useState(false);
+    const[generatingAI, setGeneratingAI] = useState(false);
+    const [discountPercent, setDiscountPercent] = useState<number>(0);
     
     const [productData, setProductData] = useState<ProductForm>({
         title: '', price: '', lessPrice: '', image: '', category: 'Mobile Phone', 
@@ -22,6 +23,19 @@ const UploadGadgetTab = () => {
         fastCharging: 'Yes', wireless: 'Yes', waterResistant: 'Yes',
         description: '', keyFeatures: '', metaTitle: '', metaDescription: ''
     });
+
+    // --- NEW: Live Discount Calculator Effect ---
+    useEffect(() => {
+        const currentPrice = Number(productData.price);
+        const oldPrice = Number(productData.lessPrice);
+
+        if (currentPrice > 0 && oldPrice > currentPrice) {
+            const discount = ((oldPrice - currentPrice) / oldPrice) * 100;
+            setDiscountPercent(Math.round(discount));
+        } else {
+            setDiscountPercent(0);
+        }
+    },[productData.price, productData.lessPrice]);
 
     const uploadImage = async (file: File): Promise<string | null> => {
         setUploadingImage(true);
@@ -94,6 +108,7 @@ const UploadGadgetTab = () => {
                     fastCharging: 'Yes', wireless: 'Yes', waterResistant: 'Yes',
                     description: '', keyFeatures: '', metaTitle: '', metaDescription: ''
                 });
+                setDiscountPercent(0);
             }
         } catch (error) { toast.error("Publish failed!"); }
         finally { setLoading(false); }
@@ -113,7 +128,7 @@ const UploadGadgetTab = () => {
                 <div className="bg-gray-50 p-10 rounded-[2rem] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center group hover:border-red-600 transition-all duration-500">
                     {productData.image ? (
                         <div className="relative">
-                            <img src={productData.image} alt="Preview" className="h-40 w-40 object-contain rounded-2xl shadow-xl" />
+                            <img src={productData.image} alt="Preview" className="h-40 w-40 object-contain rounded-2xl shadow-xl bg-white p-2" />
                             <label className="absolute -bottom-2 -right-2 bg-red-600 text-white p-2 rounded-full cursor-pointer shadow-lg active:scale-90 transition-all">
                                 <FaSync size={12} />
                                 <input type="file" className="hidden" onChange={async (e) => { const url = await uploadImage(e.target.files![0]); if(url) setProductData({...productData, image: url}); }} />
@@ -130,7 +145,7 @@ const UploadGadgetTab = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <input type="text" name="title" required className="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" placeholder="Product Title" value={productData.title} onChange={handleProductChange} />
-                    <select name="category" className="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" onChange={handleProductChange} value={productData.category}>
+                    <select name="category" className="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm cursor-pointer" onChange={handleProductChange} value={productData.category}>
                         <option value="Drone">Drone</option>
                         <option value="Gimbal">Gimbal</option>
                         <option value="Tablet PC">Tablet PC</option>
@@ -158,16 +173,48 @@ const UploadGadgetTab = () => {
                 <textarea name="description" rows={5} className="w-full p-5 bg-gray-50 border-none rounded-3xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm resize-none" placeholder="Description (AI Magic can write this for you)" value={productData.description} onChange={handleProductChange}></textarea>
                 <textarea name="keyFeatures" rows={4} className="w-full p-5 bg-yellow-50/50 border-none rounded-3xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-xs resize-none" placeholder="Key Features (One per line)" value={productData.keyFeatures} onChange={handleProductChange}></textarea>
 
-                <div className="grid grid-cols-3 gap-5">
-                    <input type="text" name="price" placeholder="Sale Price" className="p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" value={productData.price} onChange={handleProductChange} />
-                    <input type="text" name="lessPrice" placeholder="Old Price" className="p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" value={productData.lessPrice} onChange={handleProductChange} />
-                    <select name="section" className="p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-bold text-sm" onChange={handleProductChange} value={productData.section}>
-                        <option value="TopSelling">Top Selling</option>
-                        <option value="BestDeals">Best Deals</option>
-                        <option value="HotDeals">Hot Deals</option>
-                        <option value="NewArrivals">New Arrivals</option>
-                        <option value="Featured">Featured</option>
-                    </select>
+                {/* PRICING & SECTION AREA */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 ml-2">Sale Price (৳)</label>
+                        <input type="number" name="price" placeholder="e.g. 5000" className="w-full p-4 bg-red-50/30 text-red-600 border border-red-100 rounded-2xl outline-none focus:ring-2 focus:ring-red-600 font-black text-sm" value={productData.price} onChange={handleProductChange} />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 ml-2">Old Price (৳)</label>
+                        <input type="number" name="lessPrice" placeholder="e.g. 6000" className="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-black font-bold text-sm" value={productData.lessPrice} onChange={handleProductChange} />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 ml-2">Display Section</label>
+                        <select name="section" className="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-black font-bold text-sm cursor-pointer" onChange={handleProductChange} value={productData.section}>
+                            <option value="TopSelling">Top Selling</option>
+                            <option value="BestDeals">Best Deals</option>
+                            <option value="HotDeals">🔥 Hot Deals</option>
+                            <option value="NewArrivals">New Arrivals</option>
+                            <option value="Featured">Featured</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* --- NEW: MAGIC LIVE PREVIEW BOX --- */}
+                <div className={`p-4 rounded-2xl border transition-all duration-500 flex items-center gap-4 ${discountPercent > 0 ? 'bg-black border-black text-white' : 'bg-gray-50 border-dashed border-gray-200 text-gray-400'}`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg shrink-0 ${discountPercent >= 20 ? 'bg-red-600 animate-pulse text-white shadow-lg shadow-red-600/30' : 'bg-gray-200 text-gray-400'}`}>
+                        {discountPercent > 0 ? <FaFire /> : <FaMoneyBillWave />}
+                    </div>
+                    <div>
+                        <h4 className="font-black uppercase tracking-widest text-[11px] mb-1">
+                            {discountPercent > 0 ? 'Offer Activated' : 'No Discount'}
+                        </h4>
+                        {discountPercent > 0 ? (
+                            <p className="text-[11px] text-gray-300 leading-tight">
+                                Custom gets <strong className="text-red-500">{discountPercent}% OFF!</strong> 
+                                {productData.section === 'HotDeals' && discountPercent >= 15 && (
+                                    <span className="block mt-1 text-[#00ffcc]">✨ Will auto-appear on Home Hot Banner!</span>
+                                )}
+                            </p>
+                        ) : (
+                            <p className="text-[10px]">Set a Sale Price lower than Old Price to offer discount.</p>
+                        )}
+                    </div>
                 </div>
 
                 <button type="submit" disabled={loading || uploadingImage} className="w-full py-5 bg-red-600 text-white font-black rounded-3xl uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-red-100 hover:bg-black transition-all">

@@ -69,7 +69,7 @@ const Categories = () => {
   };
 
   return (
-    <div className='px-[5%] lg:px-[12%] py-16 bg-white'>
+    <div className='relative z-20 px-[5%] lg:px-[12%] py-16 md:py-24 bg-white'>
         {/* === হেডার সেকশন === */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>

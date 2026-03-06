@@ -29,8 +29,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ENT GADGET",
-  description: "Your go-to source for the latest in gadgets, tech news, expert reviews, and innovative product insights to keep you ahead in the digital world.",
+  title: "ENT Gadget | Premium Tech & Gadget Store in Bangladesh",
+  description: "Buy premium mobile phones, smartwatches, earbuds, gaming consoles, and tech accessories at the best price in Bangladesh. 🔥 Best Deals & Fast Delivery!",
+  keywords:["ENT Gadget", "Gadget Shop Bangladesh", "Buy Mobile BD", "Smartwatch price in BD", "Premium Tech Shop"],
+  openGraph: {
+    title: "ENT Gadget | Premium Tech & Gadget Store",
+    description: "Buy premium mobile phones, smartwatches, and tech accessories at the best price in Bangladesh.",
+    url: "https://entgadgetbd.com",
+    siteName: "ENT Gadget",
+    images:[
+      {
+        url: "/icon.png", // আপনার ওই লোগোটা সোশ্যাল মিডিয়ায় শেয়ার করলে দেখাবে
+        width: 512,
+        height: 512,
+        alt: "ENT Gadget Logo",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
