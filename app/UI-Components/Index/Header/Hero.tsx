@@ -19,7 +19,7 @@ interface SliderData {
 }
 
 const Hero = () => {
-  const[sliders, setSliders] = useState<SliderData[]>([]);
+  const [sliders, setSliders] = useState<SliderData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,8 +45,11 @@ const Hero = () => {
   }
 
   return (
-    <div className='px-[5%] md:px-[8%] lg:px-[12%] py-6 bg-white'> 
-        <div className='relative Hero w-full group'>
+    // FIX 1: pt-8 (উপরে প্যাডিং) এবং pb-20 (নিচে অনেকখানি প্যাডিং) দেওয়া হয়েছে, যাতে নিচের সেকশনের সাথে না লেগে যায়।
+    <div className='px-[5%] md:px-[8%] lg:px-[12%] pt-8 pb-20 bg-white'> 
+        
+        {/* FIX 2: .Hero ক্লাস রিমুভ করা হয়েছে যাতে কোনো CSS কনফ্লিক্ট না করে */}
+        <div className='relative w-full group'>
             {sliders.length > 0 ? (
                 <Swiper 
                     slidesPerView={1} loop={true} effect='fade' fadeEffect={{crossFade: true}}
@@ -54,19 +57,17 @@ const Hero = () => {
                     pagination={{ clickable: true, dynamicBullets: true }}
                     navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
-                    // একদম পারফেক্ট রাউন্ডেড বক্স
-                    className='hero-swiper w-full rounded-[2rem] overflow-hidden shadow-2xl' 
+                    // FIX 3: .hero-swiper ক্লাস রিমুভ করে সরাসরি রাউন্ডেড ডিজাইন দেওয়া হয়েছে
+                    className='w-full rounded-[2.5rem] overflow-hidden shadow-2xl' 
                 >
                     {sliders.map((slide) => (
                         <SwiperSlide key={slide._id}>
                             {/* 
-                              FIXED: 
-                              1. bg-cover এবং bg-center আবার ফিরিয়ে আনা হয়েছে (আপনার আগের অরিজিনাল ডিজাইন)।
-                              2. min-h এর বদলে ফিক্সড হাইট (h-[...]) দেওয়া হয়েছে, যাতে ১৩" ল্যাপটপ বা যেকোনো স্ক্রিনে সাইজ লক থাকে এবং নিচের সেকশনে ওভারল্যাপ না করে।
+                              FIX 4: bg-cover ঠিক রেখে ہাইটগুলো ব্যালেন্স করা হয়েছে। 
+                              বিঃদ্রঃ যদি ইমেজের নিচের অংশ আপনার জন্য বেশি ইম্পরট্যান্ট হয়, তবে 'bg-center' এর জায়গায় 'bg-bottom' লিখে দিতে পারেন!
                             */}
-                            <div className="hero-wrap relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[520px] xl:h-[600px] flex items-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${slide.image}')` }}> 
+                            <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px] flex items-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${slide.image}')` }}> 
                                 
-                                {/* ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট */}
                                 <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 lg:via-white/70 to-transparent"></div>
                                 
                                 <div className="relative w-full md:w-4/5 lg:w-3/5 p-8 md:p-12 xl:p-16 z-10">
@@ -104,7 +105,7 @@ const Hero = () => {
                     ))}
                 </Swiper>
             ) : (
-                <div className="w-full h-[400px] md:h-[500px] bg-gray-50 rounded-[2rem] flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
+                <div className="w-full h-[400px] md:h-[500px] bg-gray-50 rounded-[2.5rem] flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
                     <i className="bi bi-images text-4xl text-gray-300 mb-2"></i>
                     <p className="text-gray-400 font-bold text-sm">No banners active. Upload from Admin Panel.</p>
                 </div>

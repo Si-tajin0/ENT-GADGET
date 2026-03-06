@@ -63,17 +63,17 @@
 }
 
 
-.Hero {
+/* .Hero {
   width: 100%;
   height: 60vh;
   border-radius: 20px;
   background-size: cover;
   background-position: 50% center;
-}
+} */
 
-.hero-swiper {
+/* .hero-swiper {
   padding: 40px 0;
-}
+} */
 
 /* .hero-wrap:after {
   content: '';
