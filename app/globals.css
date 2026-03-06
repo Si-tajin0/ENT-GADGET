@@ -75,7 +75,7 @@
   padding: 40px 0;
 } */
 
-/* .hero-wrap:after {
+.hero-wrap:after {
   content: '';
   position: absolute;
   top: 0;
@@ -84,7 +84,7 @@
   height: 100%;
   background-color: #ffffff;
   opacity: 0.32;
-} */
+}
 
 .hero-wrap h1{
   opacity: 0;

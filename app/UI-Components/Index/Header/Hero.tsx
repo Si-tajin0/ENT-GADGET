@@ -19,7 +19,7 @@ interface SliderData {
 }
 
 const Hero = () => {
-  const [sliders, setSliders] = useState<SliderData[]>([]);
+  const[sliders, setSliders] = useState<SliderData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,17 +38,17 @@ const Hero = () => {
 
   if (loading) {
     return (
-        <div className="w-full h-[400px] md:h-[500px] lg:h-[520px] flex items-center justify-center bg-white rounded-[2rem]">
-            <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="px-[5%] md:px-[8%] lg:px-[12%] pt-8 pb-20 bg-white w-full">
+            <div className="w-full h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] flex items-center justify-center bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200">
+                <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
         </div>
     );
   }
 
   return (
-    // FIX 1: pt-8 (উপরে প্যাডিং) এবং pb-20 (নিচে অনেকখানি প্যাডিং) দেওয়া হয়েছে, যাতে নিচের সেকশনের সাথে না লেগে যায়।
     <div className='px-[5%] md:px-[8%] lg:px-[12%] pt-8 pb-20 bg-white'> 
         
-        {/* FIX 2: .Hero ক্লাস রিমুভ করা হয়েছে যাতে কোনো CSS কনফ্লিক্ট না করে */}
         <div className='relative w-full group'>
             {sliders.length > 0 ? (
                 <Swiper 
@@ -56,17 +56,13 @@ const Hero = () => {
                     modules={[EffectFade, Pagination, Autoplay, Navigation]} 
                     pagination={{ clickable: true, dynamicBullets: true }}
                     navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
-                    autoplay={{ delay: 4000, disableOnInteraction: false }}
-                    // FIX 3: .hero-swiper ক্লাস রিমুভ করে সরাসরি রাউন্ডেড ডিজাইন দেওয়া হয়েছে
+                    autoplay={{ delay: 5000, disableOnInteraction: false }}
                     className='w-full rounded-[2.5rem] overflow-hidden shadow-2xl' 
                 >
                     {sliders.map((slide) => (
                         <SwiperSlide key={slide._id}>
-                            {/* 
-                              FIX 4: bg-cover ঠিক রেখে ہাইটগুলো ব্যালেন্স করা হয়েছে। 
-                              বিঃদ্রঃ যদি ইমেজের নিচের অংশ আপনার জন্য বেশি ইম্পরট্যান্ট হয়, তবে 'bg-center' এর জায়গায় 'bg-bottom' লিখে দিতে পারেন!
-                            */}
-                            <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px] flex items-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${slide.image}')` }}> 
+                            {/* এনিমেশনের জন্য hero-wrap এবং ফিক্সড হাইট দেওয়া হয়েছে */}
+                            <div className="hero-wrap relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px] flex items-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${slide.image}')` }}> 
                                 
                                 <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 lg:via-white/70 to-transparent"></div>
                                 
@@ -75,7 +71,7 @@ const Hero = () => {
                                         {slide.badge}
                                     </span>
                                     
-                                    <h1 className="unbounded text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] font-black leading-tight text-black tracking-tighter mb-4">
+                                    <h1 className="unbounded text-3xl md:text-4xl lg:text-5xl xl:text-[4.2rem] font-black leading-tight text-black tracking-tighter mb-4">
                                         {slide.titleStart} <br className="hidden md:block" />  
                                         <span className="text-red-600">{slide.titleHighlight}</span> {slide.titleEnd}
                                     </h1>
