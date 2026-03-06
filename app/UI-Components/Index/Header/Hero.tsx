@@ -19,8 +19,8 @@ interface SliderData {
 }
 
 const Hero = () => {
-  const [sliders, setSliders] = useState<SliderData[]>([]);
-  const[loading, setLoading] = useState(true);
+  const[sliders, setSliders] = useState<SliderData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSliders = async () => {
@@ -38,7 +38,7 @@ const Hero = () => {
 
   if (loading) {
     return (
-        <div className="w-full h-[400px] md:h-[500px] flex items-center justify-center bg-white">
+        <div className="w-full h-[400px] md:h-[500px] lg:h-[520px] flex items-center justify-center bg-white rounded-[2rem]">
             <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
     );
@@ -54,39 +54,45 @@ const Hero = () => {
                     pagination={{ clickable: true, dynamicBullets: true }}
                     navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
+                    // একদম পারফেক্ট রাউন্ডেড বক্স
                     className='hero-swiper w-full rounded-[2rem] overflow-hidden shadow-2xl' 
                 >
                     {sliders.map((slide) => (
                         <SwiperSlide key={slide._id}>
-                            {/* CHANGED: Adjusted lg:min-h to 480px and xl:min-h to 600px for 13" laptops */}
-                            <div className="hero-wrap relative w-full min-h-[400px] md:min-h-[450px] lg:min-h-[480px] xl:min-h-[600px] flex items-center bg-cover bg-center" style={{ backgroundImage: `url('${slide.image}')` }}> 
-                                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 lg:via-white/90 to-transparent"></div>
+                            {/* 
+                              FIXED: 
+                              1. bg-cover এবং bg-center আবার ফিরিয়ে আনা হয়েছে (আপনার আগের অরিজিনাল ডিজাইন)।
+                              2. min-h এর বদলে ফিক্সড হাইট (h-[...]) দেওয়া হয়েছে, যাতে ১৩" ল্যাপটপ বা যেকোনো স্ক্রিনে সাইজ লক থাকে এবং নিচের সেকশনে ওভারল্যাপ না করে।
+                            */}
+                            <div className="hero-wrap relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[520px] xl:h-[600px] flex items-center bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('${slide.image}')` }}> 
+                                
+                                {/* ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 lg:via-white/70 to-transparent"></div>
                                 
                                 <div className="relative w-full md:w-4/5 lg:w-3/5 p-8 md:p-12 xl:p-16 z-10">
-                                    <span className="inline-block bg-red-100 text-red-600 px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-[0.2em] mb-4 md:mb-6 animate-pulse border border-red-200">
+                                    <span className="inline-block bg-red-100 text-red-600 px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-[0.2em] mb-4 md:mb-5 animate-pulse border border-red-200">
                                         {slide.badge}
                                     </span>
                                     
-                                    {/* CHANGED: Adjusted Text sizes so it doesn't break on 13" laptop (lg:text-5xl) */}
-                                    <h1 className="unbounded text-3xl md:text-5xl lg:text-5xl xl:text-[4.2rem] font-black leading-tight text-black tracking-tighter mb-4">
+                                    <h1 className="unbounded text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] font-black leading-tight text-black tracking-tighter mb-4">
                                         {slide.titleStart} <br className="hidden md:block" />  
                                         <span className="text-red-600">{slide.titleHighlight}</span> {slide.titleEnd}
                                     </h1>
                                     
-                                    <p className="max-w-md text-gray-500 font-bold text-xs md:text-sm lg:text-base mb-6 md:mb-8 leading-relaxed line-clamp-3">
+                                    <p className="max-w-md text-gray-600 font-bold text-xs md:text-sm lg:text-base mb-6 md:mb-8 leading-relaxed line-clamp-2 md:line-clamp-3">
                                         {slide.description}
                                     </p>
                                     
                                     <div className="flex flex-wrap items-center gap-3 md:gap-4">
                                         <Link href={slide.link}>
-                                            <button className="px-6 py-3 lg:px-10 lg:py-4 rounded-xl text-white font-black bg-red-600 hover:bg-black transition-all duration-500 cursor-pointer shadow-xl shadow-red-200 uppercase text-[10px] lg:text-xs tracking-widest active:scale-95">
+                                            <button className="px-6 py-3 lg:px-8 lg:py-4 rounded-xl text-white font-black bg-red-600 hover:bg-black transition-all duration-500 cursor-pointer shadow-xl shadow-red-200 uppercase text-[10px] lg:text-xs tracking-widest active:scale-95">
                                                 {slide.buttonText} <i className="bi bi-arrow-right ml-2"></i>
                                             </button>
                                         </Link>
                                         
                                         {slide.secondaryBtnText && slide.secondaryBtnLink && (
                                             <Link href={slide.secondaryBtnLink}>
-                                                <button className="px-6 py-3 lg:px-8 lg:py-4 rounded-xl text-gray-600 hover:text-white font-black bg-white hover:bg-black border-2 border-gray-100 hover:border-black transition-all duration-500 cursor-pointer uppercase text-[10px] lg:text-xs tracking-widest active:scale-95 shadow-sm">
+                                                <button className="px-6 py-3 lg:px-8 lg:py-4 rounded-xl text-gray-700 hover:text-white font-black bg-white/80 backdrop-blur-sm hover:bg-black border-2 border-gray-100 hover:border-black transition-all duration-500 cursor-pointer uppercase text-[10px] lg:text-xs tracking-widest active:scale-95 shadow-sm">
                                                     {slide.secondaryBtnText}
                                                 </button>
                                             </Link>
@@ -98,7 +104,7 @@ const Hero = () => {
                     ))}
                 </Swiper>
             ) : (
-                <div className="w-full h-[400px] bg-gray-50 rounded-[2rem] flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
+                <div className="w-full h-[400px] md:h-[500px] bg-gray-50 rounded-[2rem] flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
                     <i className="bi bi-images text-4xl text-gray-300 mb-2"></i>
                     <p className="text-gray-400 font-bold text-sm">No banners active. Upload from Admin Panel.</p>
                 </div>
